@@ -105,4 +105,9 @@ anchor_pt = [landmarks[27, 0], landmarks[27, 1]]
   ```
 
 ## Further Goal: Refine Mask
-We have previously recommended **[OpenFace](https://github.com/TadasBaltrusaitis/OpenFace)**, it provides estimation for head pose, which includes head's rotative movements: [raw pitch and yaw](https://www.researchgate.net/figure/Orientation-of-the-head-in-terms-of-pitch-roll-and-yaw-movements-describing-the-three_fig1_279291928). Estimations are provided in speech.csv file at each frame. Since relative pose between face and masks are static, **roll** angle could replace the ``face_roll_angle`` calculated above. **pitch** angle can also help us improve the mask filtering effect.
+We have previously recommended **[OpenFace](https://github.com/TadasBaltrusaitis/OpenFace)**, it provides estimation for head pose, which includes head's rotative movements: [raw pitch and yaw](https://www.researchgate.net/figure/Orientation-of-the-head-in-terms-of-pitch-roll-and-yaw-movements-describing-the-three_fig1_279291928). Estimations are provided in ***speech.csv*** file at each frame. Since relative pose between face and masks are assumed to be fixed, **roll** angle could replace the ``face_roll_angle`` calculated above. **pitch** angle can also help us determine four "perspective points" in the image so as to improve the mask filtering effect.
+<p align="center">
+  <img width="400" height="345" src="head_pose.png">
+</p>
+
+Three axes are shown in the image above, counter-clockwise is the positive rotation direction for each axis. ``Rz`` is the axis which points backwards and also the axis head **rolls** along with, roll angles are given in ``pose_Rz`` column of the ***speech.csv***. As well as **pitch** value in ``pose_Rx`` colum and **yaw** in ``pose_Ry`` column.
