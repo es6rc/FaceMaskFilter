@@ -66,14 +66,16 @@ anchor_pt = [landmarks[27, 0], landmarks[27, 1]]
   y_dif = face_right_extreme[1] - face_left_extreme[1]
   face_roll_angle = math.atan2(y_dif, x_dif)
 
-  per_tl = [landmarks[17, 0] + 10 * math.sin(face_roll_angle), 
-            landmarks[17, 1] + 10 * math.cos(face_roll_angle)]
-  per_tr = [landmarks[26, 0] + 10 * math.sin(face_roll_angle),
-            landmarks[26, 1] + 10 * math.cos(face_roll_angle)]
-  per_3 = anchor_pt
-  per_4 = [anchor_pt[0] - 100 * math.sin(face_roll_angle),
-           anchor_pt[1] - 100 * math.cos(face_roll_angle)]
-  dest_per_pts = [per_tl, per_tr, per3, per_4]
+  per_tl = [landmarks[17][0] - 10 + 10 * math.sin(pose[2]),
+            landmarks[17][1] - 10 * math.cos(pose[2])]
+  per_tr = [landmarks[26][0] + 10 + 10 * math.sin(pose[2]),
+            landmarks[26][1] - 10 * math.cos(pose[2])]
+  per_3 = [landmarks[17][0] - 10 - 30 * math.sin(pose[2]),
+            landmarks[17][1] + 30 * math.cos(pose[2])]
+  per_4 = [landmarks[26][0]  + 10 - 30 * math.sin(pose[2]),
+            landmarks[26][1] + 30 * math.cos(pose[2])]
+            
+  dest_per_pts = [per_tl, per_tr, per_3, per_4]
   ```
   the major goal in this step is to give an accurate estimation of destination perspective points for projecting mask filter onto the face.
 * Find Perspective Transformation
@@ -88,20 +90,22 @@ anchor_pt = [landmarks[27, 0], landmarks[27, 1]]
 
 * Overlay the mask to face image
   ```
-  def overlay(face_img, overlay_img)
-  # Mask RGB info
-  overlay_rgb = overlay_img[:, :, :3]
-  # Opacity value
-  overlay_mask = overlay_img[:, :, 3:]
-  # Background
-  bkgd_mask = 255 - overlay_mask
-  overlay_mask = cv2.cvtColor(overlay_mask, cv2.COLOR_GRAY2BGR)
-  bkgd_mask = cv2.cvtColor(bkgd_mask, cv2.COLOR_GRAY2BGR)
+  def overlay(face_img, overlay_img):
+      # Mask RGB info
+      overlay_rgb = overlay_img[:, :, :3]
+      # Opacity value
+      overlay_mask = overlay_img[:, :, 3:]
+      # Background
+      bkgd_mask = 255 - overlay_mask
+      overlay_mask = cv2.cvtColor(overlay_mask, cv2.COLOR_GRAY2BGR)
+      bkgd_mask = cv2.cvtColor(bkgd_mask, cv2.COLOR_GRAY2BGR)
 
-  other_part = (face_img * (1 / 255.0)) * (bkgd_mask * (1 / 255.0))
-  overlay_part = (overlay_rgb * (1 / 255.0)) * (overlay_mask * (1 / 255.0))
+      other_part = (face_img * (1 / 255.0)) * (bkgd_mask * (1 / 255.0))
+      overlay_part = (overlay_rgb * (1 / 255.0)) * (overlay_mask * (1 / 255.0))
 
-  final_img  = cv2.addWeighted(other_part, 255.0, overlay_part, 255.0, 0.0)
+      final_img  = cv2.addWeighted(other_part, 255.0, overlay_part, 255.0, 0.0)
+
+      return final_img
   ```
 
 ## Further Goal: Refine Mask
