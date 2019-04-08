@@ -1,4 +1,4 @@
 *.mp4
 .vscode
 *pdf
-.csv
+*.csv
