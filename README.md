@@ -88,20 +88,21 @@ anchor_pt = [landmarks[27, 0], landmarks[27, 1]]
 
 * Overlay the mask to face image
   ```
-  def overlay(face_img, overlay_img)
-  # Mask RGB info
-  overlay_rgb = overlay_img[:, :, :3]
-  # Opacity value
-  overlay_mask = overlay_img[:, :, 3:]
-  # Background
-  bkgd_mask = 255 - overlay_mask
-  overlay_mask = cv2.cvtColor(overlay_mask, cv2.COLOR_GRAY2BGR)
-  bkgd_mask = cv2.cvtColor(bkgd_mask, cv2.COLOR_GRAY2BGR)
+  def overlay(face_img, overlay_img):
+    # Mask RGB info
+    overlay_rgb = overlay_img[:, :, :3]
+    # Opacity value
+    overlay_mask = overlay_img[:, :, 3:]
+    # Background
+    bkgd_mask = 255 - overlay_mask
+    overlay_mask = cv2.cvtColor(overlay_mask, cv2.COLOR_GRAY2BGR)
+    bkgd_mask = cv2.cvtColor(bkgd_mask, cv2.COLOR_GRAY2BGR)
 
-  other_part = (face_img * (1 / 255.0)) * (bkgd_mask * (1 / 255.0))
-  overlay_part = (overlay_rgb * (1 / 255.0)) * (overlay_mask * (1 / 255.0))
+    other_part = (face_img * (1 / 255.0)) * (bkgd_mask * (1 / 255.0))
+    overlay_part = (overlay_rgb * (1 / 255.0)) * (overlay_mask * (1 / 255.0))
 
-  final_img  = cv2.addWeighted(other_part, 255.0, overlay_part, 255.0, 0.0)
+    final_img  = cv2.addWeighted(other_part, 255.0, overlay_part, 255.0, 0.0)
+    return final_img
   ```
 
 ## Further Goal: Refine Mask
